@@ -5,19 +5,19 @@
 package toughasnails.item;
 
 import net.minecraft.client.renderer.BiomeColors;
-import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.DyedItemColor;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.Level;
 import toughasnails.api.item.TANItems;
 
 public class LeafArmorItem extends ArmorItem
 {
-    public LeafArmorItem(Holder<ArmorMaterial> $$0, Type $$1, Properties $$2) {
+    public LeafArmorItem(ArmorMaterial $$0, ArmorType $$1, Properties $$2) {
         super($$0, $$1, $$2);
     }
 

@@ -9,6 +9,7 @@ import net.minecraft.core.*;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -21,17 +22,14 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import toughasnails.api.blockentity.TANBlockEntityTypes;
 import toughasnails.api.crafting.TANRecipeTypes;
 import toughasnails.block.WaterPurifierBlock;
-import toughasnails.container.WaterPurifierContainer;
+import toughasnails.container.WaterPurifierMenu;
 import toughasnails.crafting.WaterPurifierRecipe;
 
 import javax.annotation.Nullable;
@@ -59,6 +57,8 @@ public class WaterPurifierBlockEntity extends BaseContainerBlockEntity implement
 
     /** The total time needed to complete purification. */
     private int purifyTotalTime;
+
+    private final RecipeManager.CachedCheck<SingleRecipeInput, ? extends Recipe<SingleRecipeInput>> quickCheck;
 
     protected final ContainerData dataAccess = new ContainerData()
     {
@@ -108,6 +108,7 @@ public class WaterPurifierBlockEntity extends BaseContainerBlockEntity implement
     public WaterPurifierBlockEntity(BlockPos pos, BlockState state)
     {
         super(TANBlockEntityTypes.WATER_PURIFIER, pos, state);
+        this.quickCheck = RecipeManager.createCheck(TANRecipeTypes.WATER_PURIFYING);
     }
 
     @Override
@@ -146,7 +147,7 @@ public class WaterPurifierBlockEntity extends BaseContainerBlockEntity implement
         ItemStack filterStack = blockEntity.items.get(1);
         boolean hasFilter = !filterStack.isEmpty();
         if (blockEntity.isFiltering() || hasFilter && !blockEntity.items.get(0).isEmpty()) {
-            RecipeHolder<?> recipe = blockEntity.level.getRecipeManager().getRecipeFor((RecipeType<WaterPurifierRecipe>) TANRecipeTypes.WATER_PURIFYING, new SingleRecipeInput(blockEntity.items.get(0)), blockEntity.level).orElse(null);
+            RecipeHolder<? extends Recipe<SingleRecipeInput>> recipe = blockEntity.quickCheck.getRecipeFor(new SingleRecipeInput(blockEntity.items.get(0)), (ServerLevel)level).orElse(null);
 
             if (recipe != null)
             {
@@ -164,8 +165,7 @@ public class WaterPurifierBlockEntity extends BaseContainerBlockEntity implement
                             filterStack.shrink(1);
                             if (filterStack.isEmpty())
                             {
-                                Item remainingItem = filter.getCraftingRemainingItem();
-                                blockEntity.items.set(1, remainingItem == null ? ItemStack.EMPTY : new ItemStack(remainingItem));
+                                blockEntity.items.set(1, filter.getCraftingRemainder());
                             }
                         }
                     }
@@ -202,7 +202,7 @@ public class WaterPurifierBlockEntity extends BaseContainerBlockEntity implement
     @Override
     protected AbstractContainerMenu createMenu(int id, Inventory player)
     {
-        return new WaterPurifierContainer(id, player, this, this.dataAccess);
+        return new WaterPurifierMenu(id, player, this, this.dataAccess);
     }
 
     @Override
@@ -342,11 +342,12 @@ public class WaterPurifierBlockEntity extends BaseContainerBlockEntity implement
         return this.filterTimeRemaining > 0;
     }
 
-    protected boolean canFilter(@Nullable Recipe<?> recipe)
+    protected boolean canFilter(@Nullable Recipe<SingleRecipeInput> recipe)
     {
         if (!this.items.get(0).isEmpty() && recipe != null)
         {
-            ItemStack recipeResult = recipe.getResultItem(this.level.registryAccess());
+            ItemStack input = this.items.get(0);
+            ItemStack recipeResult = recipe.assemble(new SingleRecipeInput(input), this.level.registryAccess());
 
             // Invalid recipe result
             if (recipeResult.isEmpty())
@@ -377,15 +378,16 @@ public class WaterPurifierBlockEntity extends BaseContainerBlockEntity implement
     /** Get the time taken for an input item to be purified. */
     protected int getTotalPurifyTime()
     {
-        return this.level.getRecipeManager().getRecipeFor((RecipeType<WaterPurifierRecipe>) TANRecipeTypes.WATER_PURIFYING, new SingleRecipeInput(this.items.get(0)), this.level).map(r -> r.value().getPurifyTime()).orElse(200);
+        SingleRecipeInput singlerecipeinput = new SingleRecipeInput(this.items.get(0));
+        return this.quickCheck.getRecipeFor(singlerecipeinput, (ServerLevel)this.level).map(p_379263_ -> ((WaterPurifierRecipe)p_379263_.value()).getPurifyTime()).orElse(200);
     }
 
-    private void filter(@Nullable Recipe<?> recipe)
+    private void filter(@Nullable Recipe<SingleRecipeInput> recipe)
     {
         if (recipe != null && this.canFilter(recipe))
         {
             ItemStack input = this.items.get(0);
-            ItemStack recipeResult = recipe.getResultItem(this.level.registryAccess());
+            ItemStack recipeResult = recipe.assemble(new SingleRecipeInput(input), this.level.registryAccess());
             ItemStack currentResult = this.items.get(2);
 
             // Update the result stuck

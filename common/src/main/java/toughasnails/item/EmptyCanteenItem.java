@@ -12,7 +12,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -46,12 +46,12 @@ public class EmptyCanteenItem extends Item
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(@NotNull Level level, Player player, @NotNull InteractionHand hand)
+    public InteractionResult use(@NotNull Level level, Player player, @NotNull InteractionHand hand)
     {
         return this.fillCanteen(level, player, player.getItemInHand(hand));
     }
 
-    protected InteractionResultHolder<ItemStack> fillCanteen(Level level, Player player, ItemStack stack)
+    protected InteractionResult fillCanteen(Level level, Player player, ItemStack stack)
     {
         HitResult rayTraceResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
 
@@ -72,7 +72,7 @@ public class EmptyCanteenItem extends Item
                     {
                         level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
                         ((RainCollectorBlock) TANBlocks.RAIN_COLLECTOR).setWaterLevel(level, pos, state, waterLevel - 1);
-                        return InteractionResultHolder.success(this.replaceCanteen(stack, player, new ItemStack(getPurifiedWaterCanteen())));
+                        return InteractionResult.SUCCESS.heldItemTransformedTo(this.replaceCanteen(stack, player, new ItemStack(getPurifiedWaterCanteen())));
                     }
                 }
                 else if (state.getBlock() == Blocks.WATER_CAULDRON)
@@ -84,7 +84,7 @@ public class EmptyCanteenItem extends Item
                     {
                         level.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1.0F, 1.0F);
                         LayeredCauldronBlock.lowerFillLevel(state, level, pos);
-                        return InteractionResultHolder.success(this.replaceCanteen(stack, player, new ItemStack(getWaterCanteen())));
+                        return InteractionResult.SUCCESS.heldItemTransformedTo(this.replaceCanteen(stack, player, new ItemStack(getWaterCanteen())));
                     }
                 }
                 else if (level.getFluidState(pos).is(FluidTags.WATER))
@@ -98,8 +98,8 @@ public class EmptyCanteenItem extends Item
                     Holder<Biome> biome = player.level().getBiome(player.blockPosition());
                     Item canteenItem;
 
-                    var enchantmentRegistry = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
-                    if (EnchantmentHelper.getItemEnchantmentLevel(enchantmentRegistry.getHolderOrThrow(TANEnchantments.WATER_CLEANSING), stack) > 0 || biome.is(ModTags.Biomes.PURIFIED_WATER_BIOMES))
+                    var enchantmentRegistry = level.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+                    if (EnchantmentHelper.getItemEnchantmentLevel(enchantmentRegistry.getOrThrow(TANEnchantments.WATER_CLEANSING), stack) > 0 || biome.is(ModTags.Biomes.PURIFIED_WATER_BIOMES))
                     {
                         canteenItem = getPurifiedWaterCanteen();
                     }
@@ -112,18 +112,12 @@ public class EmptyCanteenItem extends Item
                         canteenItem = getWaterCanteen();
                     }
 
-                    return InteractionResultHolder.sidedSuccess(this.replaceCanteen(stack, player, new ItemStack(canteenItem)), level.isClientSide());
+                    return InteractionResult.SUCCESS.heldItemTransformedTo(this.replaceCanteen(stack, player, new ItemStack(canteenItem)));
                 }
             }
         }
 
-        return InteractionResultHolder.pass(stack);
-    }
-
-    @Override
-    public boolean isEnchantable(ItemStack stack)
-    {
-        return true;
+        return InteractionResult.PASS;
     }
 
     protected ItemStack replaceCanteen(ItemStack oldStack, Player player, ItemStack newStack)

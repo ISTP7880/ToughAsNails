@@ -4,6 +4,7 @@
  ******************************************************************************/
 package toughasnails.potion;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.effect.MobEffect;
@@ -19,7 +20,7 @@ public class ThirstEffect extends MobEffect
     }
 
     @Override
-    public boolean applyEffectTick(LivingEntity entity, int amplifier)
+    public boolean applyEffectTick(ServerLevel level, LivingEntity entity, int amplifier)
     {
         if (entity instanceof Player)
         {

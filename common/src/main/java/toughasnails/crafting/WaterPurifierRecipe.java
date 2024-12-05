@@ -14,19 +14,21 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import toughasnails.api.crafting.TANRecipeBookCategories;
 import toughasnails.api.crafting.TANRecipeSerializers;
 import toughasnails.api.crafting.TANRecipeTypes;
+
+import javax.annotation.Nullable;
 
 public class WaterPurifierRecipe implements Recipe<SingleRecipeInput>
 {
     protected final ItemStack input;
     protected final ItemStack result;
     protected final int purifyTime;
+    @Nullable
+    private PlacementInfo placementInfo;
 
     public WaterPurifierRecipe(ItemStack input, ItemStack result, int purifyTime)
     {
@@ -51,26 +53,35 @@ public class WaterPurifierRecipe implements Recipe<SingleRecipeInput>
         return this.result.copy();
     }
 
-    @Override
-    public boolean canCraftInDimensions(int width, int height)
-    {
-        return true;
-    }
-
-    @Override
-    public ItemStack getResultItem(HolderLookup.Provider lookup)
+    protected ItemStack result()
     {
         return this.result;
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer()
+    public PlacementInfo placementInfo()
+    {
+        if (this.placementInfo == null) {
+            this.placementInfo = PlacementInfo.create(Ingredient.of(this.input.getItem()));
+        }
+
+        return this.placementInfo;
+    }
+
+    @Override
+    public RecipeBookCategory recipeBookCategory()
+    {
+        return TANRecipeBookCategories.WATER_PURIFYING;
+    }
+
+    @Override
+    public RecipeSerializer<? extends Recipe<SingleRecipeInput>> getSerializer()
     {
         return TANRecipeSerializers.WATER_PURIFYING;
     }
 
     @Override
-    public RecipeType<?> getType()
+    public RecipeType<? extends Recipe<SingleRecipeInput>> getType()
     {
         return TANRecipeTypes.WATER_PURIFYING;
     }

@@ -10,6 +10,7 @@ import glitchcore.event.player.PlayerEvent;
 import glitchcore.event.player.PlayerInteractEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -17,7 +18,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -95,7 +96,7 @@ public class ThirstHandler
         }
 
         // Increment thirst if on peaceful mode
-        if (difficulty == Difficulty.PEACEFUL && player.level().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION))
+        if (difficulty == Difficulty.PEACEFUL && ((ServerLevel)player.level()).getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION))
         {
             if (thirst.isThirsty() && player.tickCount % 10 == 0)
             {
@@ -215,7 +216,7 @@ public class ThirstHandler
         ItemStack replacementStack = ItemUtils.createFilledResult(stack, player, filledStack);
 
         // Cancel the event, we've taken responsibility for bottle filling
-        event.setCancelResult(InteractionResultHolder.sidedSuccess(replacementStack, level.isClientSide()));
+        event.setCancelResult(InteractionResult.SUCCESS.heldItemTransformedTo(replacementStack));
         event.setCancelled(true);
     }
 
@@ -264,7 +265,7 @@ public class ThirstHandler
             {
                 inWorldDrinkTimer = IN_WORLD_DRINK_COOLDOWN;
                 ModPackets.HANDLER.sendToServer(new DrinkInWorldPacket(pos));
-                player.playSound(SoundEvents.GENERIC_DRINK, 0.5f, 1.0f);
+                player.playSound(SoundEvents.GENERIC_DRINK.value(), 0.5f, 1.0f);
                 player.swing(InteractionHand.MAIN_HAND);
             }
         }

@@ -12,14 +12,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.armortrim.ArmorTrim;
-import net.minecraft.world.item.armortrim.TrimMaterial;
-import net.minecraft.world.item.armortrim.TrimMaterials;
+import net.minecraft.world.item.equipment.trim.TrimMaterial;
+import net.minecraft.world.item.equipment.trim.TrimMaterials;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import toughasnails.init.ModConfig;
@@ -115,7 +115,7 @@ public class TooltipHandler
         }
 
         @Override
-        public int getHeight()
+        public int getHeight(Font font)
         {
             return 9;
         }
@@ -127,7 +127,7 @@ public class TooltipHandler
         }
 
         @Override
-        public void renderImage(Font font, int x, int y, GuiGraphics gui)
+        public void renderImage(Font font, int x, int y, int width, int height, GuiGraphics gui)
         {
             gui.pose().pushPose();
 
@@ -142,11 +142,11 @@ public class TooltipHandler
                 // Draw a full droplet
                 if (this.amount > dropletHalf)
                 {
-                    gui.blit(ThirstOverlayRenderer.OVERLAY, startX, startY, 0, 41, 8, 8, 256, 256);
+                    gui.blit(RenderType::guiTextured, ThirstOverlayRenderer.OVERLAY, startX, startY, 0, 41, 8, 8, 256, 256);
                 }
                 else if (this.amount == dropletHalf) // Draw a half droplet
                 {
-                    gui.blit(ThirstOverlayRenderer.OVERLAY, startX, startY, 8, 41, 8, 8, 256, 256);
+                    gui.blit(RenderType::guiTextured, ThirstOverlayRenderer.OVERLAY, startX, startY, 8, 41, 8, 8, 256, 256);
                 }
             }
 

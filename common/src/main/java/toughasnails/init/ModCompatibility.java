@@ -31,7 +31,7 @@ public class ModCompatibility
 
     public static boolean coldEnoughToSnowSeasonal(Level level, Holder<Biome> biome, BlockPos pos)
     {
-        return SeasonHooks.coldEnoughToSnowSeasonal(level, biome, pos);
+        return SeasonHooks.coldEnoughToSnowSeasonal(level, pos, level.getSeaLevel());
     }
 
     private static TemperatureLevel seasonModifier(Level level, BlockPos pos, TemperatureLevel current)

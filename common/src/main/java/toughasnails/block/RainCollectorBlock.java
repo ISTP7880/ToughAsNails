@@ -11,7 +11,6 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -48,10 +47,10 @@ public class RainCollectorBlock extends Block
     }
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
         if (stack.isEmpty() || stack.getItem() != Items.GLASS_BOTTLE)
-            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+            return InteractionResult.PASS;
 
         int waterLevel = state.getValue(LEVEL);
 
@@ -72,7 +71,7 @@ public class RainCollectorBlock extends Block
             this.setWaterLevel(worldIn, pos, state, waterLevel - 1);
         }
 
-        return ItemInteractionResult.sidedSuccess(worldIn.isClientSide);
+        return InteractionResult.SUCCESS;
     }
 
     public void setWaterLevel(Level world, BlockPos pos, BlockState state, int level)

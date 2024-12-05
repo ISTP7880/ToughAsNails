@@ -4,6 +4,7 @@
  ******************************************************************************/
 package toughasnails.container;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -13,31 +14,32 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import toughasnails.api.crafting.TANRecipeTypes;
 import toughasnails.api.container.TANContainerTypes;
 import toughasnails.block.entity.WaterPurifierBlockEntity;
 import toughasnails.crafting.WaterPurifierRecipe;
 
-public class WaterPurifierContainer extends AbstractContainerMenu
+public class WaterPurifierMenu extends AbstractContainerMenu
 {
     private final Container container;
     private final ContainerData data;
     private final Level level;
+    private final RecipeManager.CachedCheck<SingleRecipeInput, ? extends Recipe<SingleRecipeInput>> quickCheck;
 
-    public WaterPurifierContainer(int id, Inventory playerInventory)
+    public WaterPurifierMenu(int id, Inventory playerInventory)
     {
         this(id, playerInventory, new SimpleContainer(3), new SimpleContainerData(4));
     }
 
-    public WaterPurifierContainer(int id, Inventory playerInventory, Container container, ContainerData data)
+    public WaterPurifierMenu(int id, Inventory playerInventory, Container container, ContainerData data)
     {
         super(TANContainerTypes.WATER_PURIFIER, id);
         this.container = container;
         this.data = data;
         this.level = playerInventory.player.level();
+        this.quickCheck = RecipeManager.createCheck(TANRecipeTypes.WATER_PURIFYING);
 
         // Add input item slot
         this.addSlot(new Slot(container, 0, 56, 17));
@@ -147,7 +149,7 @@ public class WaterPurifierContainer extends AbstractContainerMenu
 
     protected boolean canPurify(ItemStack stack)
     {
-        return this.level.getRecipeManager().getRecipeFor((RecipeType<WaterPurifierRecipe>)TANRecipeTypes.WATER_PURIFYING, new SingleRecipeInput(stack), this.level).isPresent();
+        return this.quickCheck.getRecipeFor(new SingleRecipeInput(stack), (ServerLevel)this.level).isPresent();
     }
 
     protected boolean isFilter(ItemStack stack)

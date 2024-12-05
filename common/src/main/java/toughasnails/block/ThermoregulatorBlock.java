@@ -24,7 +24,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.redstone.Orientation;
 import net.minecraft.world.phys.BlockHitResult;
 import toughasnails.api.blockentity.TANBlockEntityTypes;
 import toughasnails.api.particle.TANParticles;
@@ -36,7 +37,7 @@ import java.util.function.ToIntFunction;
 public class ThermoregulatorBlock extends BaseEntityBlock
 {
     public static final MapCodec<WaterPurifierBlock> CODEC = simpleCodec(WaterPurifierBlock::new);
-    public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
+    public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty COOLING = BooleanProperty.create("cooling");
     public static final BooleanProperty HEATING = BooleanProperty.create("heating");
     public static final BooleanProperty ENABLED = BlockStateProperties.ENABLED;
@@ -133,7 +134,7 @@ public class ThermoregulatorBlock extends BaseEntityBlock
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston)
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, Orientation orientation, boolean movedByPiston)
     {
         this.checkPoweredState(level, pos, state);
     }

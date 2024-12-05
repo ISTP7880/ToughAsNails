@@ -127,8 +127,8 @@ public class ModVillages
 
     public static void addBuildings(RegistryAccess registryAccess)
     {
-        Registry<StructureTemplatePool> templatePools = registryAccess.registry(Registries.TEMPLATE_POOL).get();
-        Registry<StructureProcessorList> processorLists = registryAccess.registry(Registries.PROCESSOR_LIST).get();
+        Registry<StructureTemplatePool> templatePools = registryAccess.lookupOrThrow(Registries.TEMPLATE_POOL);
+        Registry<StructureProcessorList> processorLists = registryAccess.lookupOrThrow(Registries.PROCESSOR_LIST);
 
         addBuildingToPool(templatePools, processorLists, ResourceLocation.parse("minecraft:village/desert/houses"), ToughAsNails.MOD_ID + ":village/desert/houses/desert_climatologist_1", 1);
         addBuildingToPool(templatePools, processorLists, ResourceLocation.parse("minecraft:village/savanna/houses"), ToughAsNails.MOD_ID + ":village/savanna/houses/savanna_climatologist_1", 2);
@@ -204,21 +204,20 @@ public class ModVillages
 
     public static void addBuildingToPool(Registry<StructureTemplatePool> templatePoolRegistry, Registry<StructureProcessorList> processorListRegistry, ResourceLocation poolRL, String nbtPieceRL, int weight)
     {
-        StructureTemplatePool pool = templatePoolRegistry.get(poolRL);
-        if (pool == null) return;
+        templatePoolRegistry.get(poolRL).ifPresent(pool -> {
+            ResourceLocation emptyProcessor = ResourceLocation.fromNamespaceAndPath("minecraft", "empty");
+            Holder<StructureProcessorList> processorHolder = processorListRegistry.getOrThrow(ResourceKey.create(Registries.PROCESSOR_LIST, emptyProcessor));
 
-        ResourceLocation emptyProcessor = ResourceLocation.fromNamespaceAndPath("minecraft", "empty");
-        Holder<StructureProcessorList> processorHolder = processorListRegistry.getHolderOrThrow(ResourceKey.create(Registries.PROCESSOR_LIST, emptyProcessor));
+            SinglePoolElement piece = SinglePoolElement.single(nbtPieceRL, processorHolder).apply(StructureTemplatePool.Projection.RIGID);
 
-        SinglePoolElement piece = SinglePoolElement.single(nbtPieceRL, processorHolder).apply(StructureTemplatePool.Projection.RIGID);
+            for (int i = 0; i < weight; i++) {
+                pool.value().templates.add(piece);
+            }
 
-        for (int i = 0; i < weight; i++) {
-            pool.templates.add(piece);
-        }
-
-        List<Pair<StructurePoolElement, Integer>> listOfPieceEntries = new ArrayList<>(pool.rawTemplates);
-        listOfPieceEntries.add(new Pair<>(piece, weight));
-        pool.rawTemplates = listOfPieceEntries;
+            List<Pair<StructurePoolElement, Integer>> listOfPieceEntries = new ArrayList<>(pool.value().rawTemplates);
+            listOfPieceEntries.add(new Pair<>(piece, weight));
+            pool.value().rawTemplates = listOfPieceEntries;
+        });
     }
 
     private static PoiType register(BiConsumer<ResourceLocation, PoiType> func, ResourceKey<PoiType> key, Set<BlockState> states, int maxTickets, int validRange)
@@ -260,7 +259,7 @@ public class ModVillages
 
     private static void registerBlockStates(ResourceKey<PoiType> key, Set<BlockState> states)
     {
-        var holder = BuiltInRegistries.POINT_OF_INTEREST_TYPE.getHolderOrThrow(key);
+        var holder = BuiltInRegistries.POINT_OF_INTEREST_TYPE.getOrThrow(key);
         states.forEach(state -> {
             if (!PoiTypes.hasPoi(state)) PoiTypes.registerBlockStates(holder, Set.of(state));
         });

@@ -10,6 +10,7 @@ import glitchcore.util.GuiUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import toughasnails.api.TANAPI;
@@ -131,12 +132,12 @@ public class TemperatureOverlayRenderer
         if (flashCounter > updateCounter)
             v += 16;
 
-        gui.blit(OVERLAY, left, top, iconIndex, v, 16, 16);
+        gui.blit(RenderType::guiTextured, OVERLAY, left, top, iconIndex, v, 16, 16, 256, 256);
 
         // Draw the arrow
         if (arrowDirection != null)
         {
-            gui.blit(OVERLAY, left, top, arrowDirection.getU(15 - (int)(arrowCounter - updateCounter)), arrowDirection.getV(), 16, 16);
+            gui.blit(RenderType::guiTextured, OVERLAY, left, top, arrowDirection.getU(15 - (int)(arrowCounter - updateCounter)), arrowDirection.getV(), 16, 16, 256, 256);
         }
     }
 

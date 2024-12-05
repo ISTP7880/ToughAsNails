@@ -12,10 +12,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.Boat;
-import net.minecraft.world.item.armortrim.ArmorTrim;
-import net.minecraft.world.item.armortrim.TrimMaterial;
-import net.minecraft.world.item.armortrim.TrimMaterials;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.equipment.trim.TrimMaterials;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.state.BlockState;
@@ -327,10 +325,10 @@ public class TemperatureHelperImpl implements TemperatureHelper.Impl.ITemperatur
         else if (armorAdjTemp == TemperatureLevel.ICY && current != TemperatureLevel.ICY) current = armorAdjTemp.increment(1);
         else current = armorAdjTemp;
 
-        var enchantmentRegistry = player.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        var enchantmentRegistry = player.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
 
         // Armor enchantments
-        if (EnchantmentHelper.getEnchantmentLevel(enchantmentRegistry.getHolderOrThrow(TANEnchantments.THERMAL_TUNING), player) > 0)
+        if (EnchantmentHelper.getEnchantmentLevel(enchantmentRegistry.getOrThrow(TANEnchantments.THERMAL_TUNING), player) > 0)
             current = TemperatureLevel.NEUTRAL;
 
         return current;
@@ -358,7 +356,7 @@ public class TemperatureHelperImpl implements TemperatureHelper.Impl.ITemperatur
 
     private static boolean coldEnoughToSnow(Level level, Holder<Biome> biome, BlockPos pos)
     {
-        return biome.value().coldEnoughToSnow(pos);
+        return biome.value().coldEnoughToSnow(pos, level.getSeaLevel());
     }
 
     public static TemperatureLevel modifyTemperatureByThermoregulators(Level level, Set<BlockPos> thermoregulators, BlockPos checkPos, TemperatureLevel current)

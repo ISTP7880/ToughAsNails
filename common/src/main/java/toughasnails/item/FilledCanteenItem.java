@@ -8,15 +8,14 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.ItemUtils;
-import net.minecraft.world.item.UseAnim;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import toughasnails.api.item.TANItems;
 import toughasnails.api.thirst.ThirstHelper;
@@ -46,12 +45,12 @@ public class FilledCanteenItem extends EmptyCanteenItem
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand)
+    public InteractionResult use(Level level, Player player, InteractionHand hand)
     {
         ItemStack stack = player.getItemInHand(hand);
-        InteractionResultHolder<ItemStack> result;
+        InteractionResult result;
 
-        if ((result = this.fillCanteen(level, player, stack)).getResult().consumesAction())
+        if ((result = this.fillCanteen(level, player, stack)).consumesAction())
         {
             return result;
         }
@@ -61,7 +60,7 @@ public class FilledCanteenItem extends EmptyCanteenItem
             return ItemUtils.startUsingInstantly(level, player, hand);
         }
 
-        return InteractionResultHolder.fail(stack);
+        return InteractionResult.FAIL;
     }
 
     @Override
@@ -99,9 +98,9 @@ public class FilledCanteenItem extends EmptyCanteenItem
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack)
+    public ItemUseAnimation getUseAnimation(ItemStack stack)
     {
-        return UseAnim.DRINK;
+        return ItemUseAnimation.DRINK;
     }
 
     public boolean canAlwaysDrink()

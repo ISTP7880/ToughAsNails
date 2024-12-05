@@ -23,6 +23,7 @@ import toughasnails.core.ToughAsNails;
 import toughasnails.forge.datagen.loot.TANLootTableProvider;
 import toughasnails.forge.datagen.provider.*;
 import toughasnails.init.ModEnchantments;
+import toughasnails.init.ModEquipmentModels;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -32,7 +33,8 @@ public class DataGenerationHandler
 {
     private static final RegistrySetBuilder REG_BUILDER = new RegistrySetBuilder()
         .add(Registries.DAMAGE_TYPE, ModDamageTypes::bootstrap)
-        .add(Registries.ENCHANTMENT, ModEnchantments::bootstrap);
+        .add(Registries.ENCHANTMENT, ModEnchantments::bootstrap)
+        .add(Registries.MODEL, ModEquipmentModels::bootstrap);
 
     @SubscribeEvent
     public static void onGatherData(GatherDataEvent event)

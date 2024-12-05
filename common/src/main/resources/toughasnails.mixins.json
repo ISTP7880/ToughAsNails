@@ -5,7 +5,6 @@
   "refmap": "toughasnails.refmap.json",
   "mixins": [
     "MixinFoodData",
-    "MixinItem",
     "MixinLivingEntity",
     "MixinPlayer",
     "MixinPotionBrewing",

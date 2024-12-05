@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import toughasnails.api.temperature.TemperatureHelper;
 import toughasnails.init.ModConfig;
@@ -32,11 +33,11 @@ public class TemperatureHooksClient
         // Normal hearts
         if (heartType == Gui.HeartType.NORMAL && TemperatureHelper.isFullyHyperthermic(player))
         {
-            gui.blitSprite(getOverheatedHeartSprite(isHardcore, isHalf, isBlinking), x, y, 9, 9);
+            gui.blitSprite(RenderType::guiTextured, getOverheatedHeartSprite(isHardcore, isHalf, isBlinking), x, y, 9, 9);
         }
         else
         {
-            gui.blitSprite(heartType.getSprite(isHardcore, isHalf, isBlinking), x, y, 9, 9);
+            gui.blitSprite(RenderType::guiTextured, heartType.getSprite(isHardcore, isHalf, isBlinking), x, y, 9, 9);
         }
     }
 

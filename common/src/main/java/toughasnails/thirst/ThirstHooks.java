@@ -1,5 +1,6 @@
 package toughasnails.thirst;
 
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
@@ -23,12 +24,10 @@ public class ThirstHooks
         }
     }
 
-    public static void doFoodDataTick(FoodData data, Player player)
+    public static void doFoodDataTick(FoodData data, ServerPlayer player)
     {
         Difficulty difficulty = player.level().getDifficulty();
         IThirst thirst = ThirstHelper.getThirst(player);
-
-        data.lastFoodLevel = data.foodLevel;
 
         if (data.exhaustionLevel > 4.0F)
         {
@@ -44,7 +43,7 @@ public class ThirstHooks
             }
         }
 
-        boolean naturalRegen = player.level().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
+        boolean naturalRegen = player.serverLevel().getGameRules().getBoolean(GameRules.RULE_NATURAL_REGENERATION);
 
         if (naturalRegen && data.saturationLevel > 0.0F && player.isHurt() && data.foodLevel >= 20 && (!ModConfig.thirst.thirstPreventHealthRegen || (thirst.getHydration() > 0.0F && thirst.getThirst() >= 20)))
         {

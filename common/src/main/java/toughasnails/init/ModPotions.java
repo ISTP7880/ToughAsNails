@@ -5,6 +5,7 @@
 package toughasnails.init;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -38,8 +39,8 @@ public class ModPotions
 
     public static void registerPotions(BiConsumer<ResourceLocation, Potion> func)
     {
-        TANPotions.ICE_RESISTANCE = registerPotion(func, "ice_resistance", new Potion(new MobEffectInstance(TANEffects.ICE_RESISTANCE, 3600)));
-        TANPotions.LONG_ICE_RESISTANCE = registerPotion(func, "long_ice_resistance", new Potion(new MobEffectInstance(TANEffects.ICE_RESISTANCE, 9600)));
+        TANPotions.ICE_RESISTANCE = registerPotion(func, "ice_resistance", new Potion("ice_resistance", new MobEffectInstance(TANEffects.ICE_RESISTANCE, 3600)));
+        TANPotions.LONG_ICE_RESISTANCE = registerPotion(func, "long_ice_resistance", new Potion("long_ice_resistance", new MobEffectInstance(TANEffects.ICE_RESISTANCE, 9600)));
     }
 
     private static Holder<MobEffect> registerEffect(BiConsumer<ResourceLocation, MobEffect> func, String name, MobEffect effect)
@@ -47,7 +48,7 @@ public class ModPotions
         ResourceLocation location = ResourceLocation.fromNamespaceAndPath(ToughAsNails.MOD_ID, name);
         ResourceKey<MobEffect> key = ResourceKey.create(Registries.MOB_EFFECT, location);
         func.accept(location, effect);
-        return BuiltInRegistries.MOB_EFFECT.getHolder(key).orElseThrow();
+        return BuiltInRegistries.MOB_EFFECT.get(key).orElseThrow();
     }
 
     private static Holder<Potion> registerPotion(BiConsumer<ResourceLocation, Potion> func, String name, Potion potion)
@@ -55,6 +56,6 @@ public class ModPotions
         ResourceLocation location = ResourceLocation.fromNamespaceAndPath(ToughAsNails.MOD_ID, name);
         ResourceKey<Potion> key = ResourceKey.create(Registries.POTION, location);
         func.accept(location, potion);
-        return BuiltInRegistries.POTION.getHolder(key).orElseThrow();
+        return BuiltInRegistries.POTION.get(key).orElseThrow();
     }
 }

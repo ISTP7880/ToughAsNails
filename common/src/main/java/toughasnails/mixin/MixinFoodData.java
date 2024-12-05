@@ -4,6 +4,7 @@
  ******************************************************************************/
 package toughasnails.mixin;
 
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodData;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,7 +17,7 @@ import toughasnails.thirst.ThirstHooks;
 public abstract class MixinFoodData
 {
     @Inject(method="tick", at=@At(value="HEAD"), cancellable = true)
-    public void onTick(Player player, CallbackInfo ci)
+    public void onTick(ServerPlayer player, CallbackInfo ci)
     {
         ThirstHooks.doFoodDataTick((FoodData)(Object)this, player);
         ci.cancel();

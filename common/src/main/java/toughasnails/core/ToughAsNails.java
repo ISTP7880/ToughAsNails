@@ -57,6 +57,7 @@ public class ToughAsNails
         regHelper.addRegistrar(Registries.BLOCK_ENTITY_TYPE, ModBlockEntities::registerBlockEntities);
         regHelper.addRegistrar(Registries.RECIPE_SERIALIZER, ModCrafting::registerRecipeSerializers);
         regHelper.addRegistrar(Registries.RECIPE_TYPE, ModCrafting::registerRecipeTypes);
+        regHelper.addRegistrar(Registries.RECIPE_BOOK_CATEGORY, ModCrafting::registerRecipeBookCategories);
         regHelper.addRegistrar(Registries.MOB_EFFECT, ModPotions::registerEffects);
         regHelper.addRegistrar(Registries.POTION, ModPotions::registerPotions);
         regHelper.addRegistrar(Registries.CREATIVE_MODE_TAB, ModCreativeTab::registerCreativeTabs);

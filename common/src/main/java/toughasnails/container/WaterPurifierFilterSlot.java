@@ -10,9 +10,9 @@ import net.minecraft.world.item.ItemStack;
 
 public class WaterPurifierFilterSlot extends Slot
 {
-    private final WaterPurifierContainer menu;
+    private final WaterPurifierMenu menu;
 
-    public WaterPurifierFilterSlot(WaterPurifierContainer container, Container inventory, int index, int xPosition, int yPosition)
+    public WaterPurifierFilterSlot(WaterPurifierMenu container, Container inventory, int index, int xPosition, int yPosition)
     {
         super(inventory, index, xPosition, yPosition);
         this.menu = container;
