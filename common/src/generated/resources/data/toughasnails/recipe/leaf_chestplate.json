@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "X": {
-      "tag": "minecraft:leaves"
-    }
+    "X": "#minecraft:leaves"
   },
   "pattern": [
     "X X",

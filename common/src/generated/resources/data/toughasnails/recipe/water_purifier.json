@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "C": {
-      "item": "minecraft:copper_ingot"
-    },
-    "G": {
-      "item": "minecraft:glass"
-    },
-    "W": {
-      "tag": "minecraft:planks"
-    }
+    "C": "minecraft:copper_ingot",
+    "G": "minecraft:glass",
+    "W": "#minecraft:planks"
   },
   "pattern": [
     "GCG",

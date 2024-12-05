@@ -33,8 +33,7 @@ public class DataGenerationHandler
 {
     private static final RegistrySetBuilder REG_BUILDER = new RegistrySetBuilder()
         .add(Registries.DAMAGE_TYPE, ModDamageTypes::bootstrap)
-        .add(Registries.ENCHANTMENT, ModEnchantments::bootstrap)
-        .add(Registries.MODEL, ModEquipmentModels::bootstrap);
+        .add(Registries.ENCHANTMENT, ModEnchantments::bootstrap);
 
     @SubscribeEvent
     public static void onGatherData(GatherDataEvent event)
@@ -46,7 +45,7 @@ public class DataGenerationHandler
         var datapackProvider = generator.addProvider(event.includeServer(), new RegistriesDatapackGenerator(output, event.getLookupProvider().thenApply(r -> constructRegistries(r, REG_BUILDER)), Set.of(TANAPI.MOD_ID)));
 
         // Recipes
-        generator.addProvider(event.includeServer(), new TANRecipeProvider(output, event.getLookupProvider()));
+        generator.addProvider(event.includeServer(), new TANRecipeProvider.Runner(output, event.getLookupProvider()));
 
         // Loot
         generator.addProvider(event.includeServer(), TANLootTableProvider.create(output, event.getLookupProvider()));

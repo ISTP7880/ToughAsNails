@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "#": {
-      "item": "minecraft:snowball"
-    },
-    "B": {
-      "item": "minecraft:bowl"
-    },
-    "S": {
-      "item": "minecraft:sugar"
-    }
+    "#": "minecraft:snowball",
+    "B": "minecraft:bowl",
+    "S": "minecraft:sugar"
   },
   "pattern": [
     " # ",

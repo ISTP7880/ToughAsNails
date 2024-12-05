@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
-    "S": {
-      "item": "minecraft:smooth_stone"
-    },
-    "T": {
-      "item": "toughasnails:thermometer"
-    }
+    "I": "minecraft:iron_ingot",
+    "S": "minecraft:smooth_stone",
+    "T": "toughasnails:thermometer"
   },
   "pattern": [
     "SIS",

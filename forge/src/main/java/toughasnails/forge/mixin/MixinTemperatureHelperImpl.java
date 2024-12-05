@@ -26,7 +26,7 @@ public abstract class MixinTemperatureHelperImpl
         }
         else
         {
-            return biome.value().coldEnoughToSnow(pos);
+            return biome.value().coldEnoughToSnow(pos, level.getSeaLevel());
         }
     }
 }

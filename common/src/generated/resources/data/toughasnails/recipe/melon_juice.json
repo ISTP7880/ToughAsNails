@@ -3,15 +3,9 @@
   "category": "misc",
   "group": "juice",
   "ingredients": [
-    {
-      "item": "toughasnails:purified_water_bottle"
-    },
-    {
-      "item": "minecraft:sugar"
-    },
-    {
-      "item": "minecraft:melon_slice"
-    }
+    "toughasnails:purified_water_bottle",
+    "minecraft:sugar",
+    "minecraft:melon_slice"
   ],
   "result": {
     "count": 1,
