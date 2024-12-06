@@ -15,14 +15,21 @@ public class ModEquipmentModels
     public static final ResourceLocation LEAF = ResourceLocation.fromNamespaceAndPath(ToughAsNails.MOD_ID, "leaf");
     public static final ResourceLocation WOOL = ResourceLocation.fromNamespaceAndPath(ToughAsNails.MOD_ID, "wool");
 
-    public static void bootstrap(BiConsumer<ResourceLocation, EquipmentModel> p_371586_)
+    public static void bootstrap(BiConsumer<ResourceLocation, EquipmentModel> output)
     {
-        p_371586_.accept(LEAF, onlyHumanoid("leaf"));
-        p_371586_.accept(WOOL, onlyHumanoid("wool"));
-    }
-
-    private static EquipmentModel onlyHumanoid(String name)
-    {
-        return EquipmentModel.builder().addHumanoidLayers(ResourceLocation.fromNamespaceAndPath(ToughAsNails.MOD_ID, name)).build();
+        output.accept(
+                LEAF,
+                EquipmentModel.builder()
+                        .addHumanoidLayers(ResourceLocation.fromNamespaceAndPath(ToughAsNails.MOD_ID, "leaf"), true)
+                        .addHumanoidLayers(ResourceLocation.fromNamespaceAndPath(ToughAsNails.MOD_ID, "leaf_overlay"), true)
+                        .build()
+        );
+        output.accept(
+                WOOL,
+                EquipmentModel.builder()
+                        .addHumanoidLayers(ResourceLocation.fromNamespaceAndPath(ToughAsNails.MOD_ID, "wool"), true)
+                        .addHumanoidLayers(ResourceLocation.fromNamespaceAndPath(ToughAsNails.MOD_ID, "wool_overlay"), false)
+                        .build()
+        );
     }
 }

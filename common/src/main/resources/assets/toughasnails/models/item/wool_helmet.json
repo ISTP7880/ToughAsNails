@@ -1,7 +1,0 @@
-{
-    "parent": "item/generated",
-    "textures": {
-        "layer0": "toughasnails:item/wool_helmet",
-        "layer1": "toughasnails:item/wool_helmet_overlay"
-    }
-}

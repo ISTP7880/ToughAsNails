@@ -4,12 +4,22 @@
  ******************************************************************************/
 package toughasnails.forge.datagen.provider;
 
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.equipment.EquipmentModel;
+import net.minecraft.world.item.equipment.EquipmentModels;
+import net.minecraft.world.item.equipment.Equippable;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import toughasnails.core.ToughAsNails;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TANItemModelProvider extends ItemModelProvider
 {
