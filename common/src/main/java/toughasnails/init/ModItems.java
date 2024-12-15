@@ -95,11 +95,6 @@ public class ModItems
         TANItems.SWEET_BERRY_JUICE = registerItem(func, "sweet_berry_juice", JuiceItem::new, new Item.Properties().stacksTo(16));
 
         TANItems.TAN_ICON = registerItem(func, "tan_icon", Item::new, new Item.Properties());
-
-        if (Environment.isClient())
-        {
-            ModClient.registerItemProperties();
-        }
     }
 
     public static Item registerBlock(BiConsumer<ResourceLocation, Item> func, Block block)

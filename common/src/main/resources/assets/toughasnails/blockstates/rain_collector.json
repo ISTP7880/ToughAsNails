@@ -1,6 +1,6 @@
 {
     "variants": {
-        "level=0": { "model": "toughasnails:block/rain_collector_empty" },
+        "level=0": { "model": "toughasnails:block/rain_collector" },
         "level=1": { "model": "toughasnails:block/rain_collector_level1" },
         "level=2": { "model": "toughasnails:block/rain_collector_level2" },
         "level=3": { "model": "toughasnails:block/rain_collector_level3" }

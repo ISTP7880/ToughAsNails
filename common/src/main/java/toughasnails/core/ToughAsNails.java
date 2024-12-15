@@ -104,7 +104,6 @@ public class ToughAsNails
 
         // Coloring
         EventManager.addListener(ModClient::registerBlockColors);
-        EventManager.addListener(ModClient::registerItemColors);
 
         // Particles
         EventManager.addListener(ModClient::registerParticleSprites);

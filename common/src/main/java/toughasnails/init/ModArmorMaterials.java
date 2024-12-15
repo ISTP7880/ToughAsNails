@@ -3,8 +3,6 @@ package toughasnails.init;
 import net.minecraft.Util;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
 
@@ -17,12 +15,12 @@ public class ModArmorMaterials
         map.put(ArmorType.LEGGINGS, 1);
         map.put(ArmorType.CHESTPLATE, 1);
         map.put(ArmorType.HELMET, 1);
-    }), 1, SoundEvents.ARMOR_EQUIP_GENERIC, 0.0F, 0.0F, ItemTags.WOOL, ModEquipmentModels.WOOL);
+    }), 1, SoundEvents.ARMOR_EQUIP_GENERIC, 0.0F, 0.0F, ItemTags.WOOL, ModEquipmentAssets.WOOL);
 
     public static ArmorMaterial LEAF = new ArmorMaterial(5, Util.make(new EnumMap<>(ArmorType.class), (map) -> {
         map.put(ArmorType.BOOTS, 1);
         map.put(ArmorType.LEGGINGS, 1);
         map.put(ArmorType.CHESTPLATE, 1);
         map.put(ArmorType.HELMET, 1);
-    }), 1, SoundEvents.ARMOR_EQUIP_GENERIC, 0.0F, 0.0F, ItemTags.LEAVES, ModEquipmentModels.LEAF);
+    }), 1, SoundEvents.ARMOR_EQUIP_GENERIC, 0.0F, 0.0F, ItemTags.LEAVES, ModEquipmentAssets.LEAF);
 }
