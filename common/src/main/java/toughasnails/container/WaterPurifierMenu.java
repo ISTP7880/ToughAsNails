@@ -4,6 +4,7 @@
  ******************************************************************************/
 package toughasnails.container;
 
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -20,13 +21,14 @@ import toughasnails.api.crafting.TANRecipeTypes;
 import toughasnails.api.container.TANContainerTypes;
 import toughasnails.block.entity.WaterPurifierBlockEntity;
 import toughasnails.crafting.WaterPurifierRecipe;
+import toughasnails.init.ModRecipePropertySets;
 
 public class WaterPurifierMenu extends AbstractContainerMenu
 {
     private final Container container;
     private final ContainerData data;
     private final Level level;
-    private final RecipeManager.CachedCheck<SingleRecipeInput, ? extends Recipe<SingleRecipeInput>> quickCheck;
+    private final RecipePropertySet acceptedInputs;
 
     public WaterPurifierMenu(int id, Inventory playerInventory)
     {
@@ -39,7 +41,7 @@ public class WaterPurifierMenu extends AbstractContainerMenu
         this.container = container;
         this.data = data;
         this.level = playerInventory.player.level();
-        this.quickCheck = RecipeManager.createCheck(TANRecipeTypes.WATER_PURIFYING);
+        this.acceptedInputs = this.level.recipeAccess().propertySet(ModRecipePropertySets.WATER_PURIFYING);
 
         // Add input item slot
         this.addSlot(new Slot(container, 0, 56, 17));
@@ -149,7 +151,7 @@ public class WaterPurifierMenu extends AbstractContainerMenu
 
     protected boolean canPurify(ItemStack stack)
     {
-        return this.quickCheck.getRecipeFor(new SingleRecipeInput(stack), (ServerLevel)this.level).isPresent();
+        return this.acceptedInputs.test(stack);
     }
 
     protected boolean isFilter(ItemStack stack)

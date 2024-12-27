@@ -40,3 +40,5 @@ accessible field net/minecraft/world/level/levelgen/structure/pools/StructureTem
 accessible method net/minecraft/world/entity/ai/village/poi/PoiTypes registerBlockStates (Lnet/minecraft/core/Holder;Ljava/util/Set;)V
 
 accessible method net/minecraft/world/level/block/entity/BlockEntityType <init> (Lnet/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier;Ljava/util/Set;)V
+
+mutable field net/minecraft/world/item/crafting/RecipeManager RECIPE_PROPERTY_SETS Ljava/util/Map;

@@ -8,6 +8,7 @@
     "MixinLivingEntity",
     "MixinPlayer",
     "MixinPotionBrewing",
+    "MixinRecipeManager",
     "MixinServerLevel",
     "MixinServerPlayer"
   ],

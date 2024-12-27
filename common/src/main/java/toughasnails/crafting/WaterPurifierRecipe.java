@@ -53,6 +53,11 @@ public class WaterPurifierRecipe implements Recipe<SingleRecipeInput>
         return this.result.copy();
     }
 
+    public ItemStack input()
+    {
+        return this.input;
+    }
+
     protected ItemStack result()
     {
         return this.result;
